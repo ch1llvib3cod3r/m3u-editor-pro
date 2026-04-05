@@ -65,11 +65,21 @@ All notable changes to M3U Editor Pro are documented here.
 
 ---
 
-## [0.2.1] - 2025
-- Updated branding, README, and project links
+## [0.2.1] - 2025-04-04
+- Rebranded project to M3U Editor Pro
+- Updated README with new name, description, and GitHub links
 
-## [0.2.0] - 2025
-- Initial release as M3U Editor Pro
+## [0.2.0] - 2025-04-04
+### Added
+- **Content-type tabs** — automatic Live / Movies / Series detection based on URL path and group title keywords; tabs hidden when only one type is present
+- **Virtual scroll** for channel list — large groups render only visible rows, keeping the UI fast for playlists with thousands of channels
+- **Chunked M3U parsing** — file is parsed in chunks with a progress bar overlay, preventing the browser from freezing on large files (300 MB+)
+- **Move group Up / Down buttons** — reorder groups within the active content-type tab
+- **Sort A→Z / Z→A** — alphabetical sort toggle for groups
+- **Toast notifications** with optional Undo button
+- **Loading overlay** with progress bar and percentage during file parse
+- **Confirm before delete** setting (opt-in)
+- Single-pass index build (`buildAllIndexes`) — constructs `groupTypeCache`, `groupItemsIndex`, and `_groupCountsCache` in one loop instead of multiple O(n) passes
 
-## [0.1.0] - 2025
-- Original release
+## [0.1.0] - 2025-07-28
+- Initial release by @arazgholami — basic M3U editor with group list, channel list, drag-and-drop reorder, item edit form, download, dark mode, and localStorage persistence
