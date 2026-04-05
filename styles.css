@@ -1,6 +1,78 @@
+/* ─── CSS Custom Properties ─────────────────────────────────────────────── */
+:root {
+    --bg:               #f8f9fa;
+    --surface:          #ffffff;
+    --panel:            #ffffff;
+    --border:           #dee2e6;
+    --text:             #212529;
+    --text-muted:       #6c757d;
+    --hover-bg:         #f1f1f1;
+    --active-bg:        #e9ecef;
+    --selected-bg:      #b6d4fe;
+    --selected-border:  #0d6efd;
+    --highlighted-bg:   rgba(13, 110, 253, 0.08);
+    --highlighted-border: #6ea8fe;
+    --input-bg:         #ffffff;
+    --input-border:     #ced4da;
+    --input-text:       #212529;
+    --scrollbar-track:  #f1f1f1;
+    --scrollbar-thumb:  #adb5bd;
+    --ghost-bg:         #d1e7ff;
+    --link-color:       #0d6efd;
+    --heading-color:    #212529;
+    --label-color:      #495057;
+    --toast-bg:         #212529;
+    --toast-text:       #f8f9fa;
+    --settings-bg:      #f8f9fa;
+    --dropdown-bg:      #ffffff;
+    --dropdown-text:    #212529;
+    --dropdown-hover:   #f8f9fa;
+    --badge-bg:         #e9ecef;
+    --badge-text:       #495057;
+    --loading-bg:       rgba(255,255,255,0.9);
+}
+
+/* ─── Dark Mode Palette ─────────────────────────────────────────────────── */
+/* Inspired by GitHub Dark — good contrast, easy on the eyes                 */
+body.dark-mode {
+    --bg:               #0d1117;
+    --surface:          #161b22;
+    --panel:            #21262d;
+    --border:           #30363d;
+    --text:             #e6edf3;
+    --text-muted:       #8b949e;
+    --hover-bg:         #1c2128;
+    --active-bg:        #2d333b;
+    --selected-bg:      #1f3a5f;
+    --selected-border:  #388bfd;
+    --highlighted-bg:   rgba(56, 139, 253, 0.10);
+    --highlighted-border: #388bfd;
+    --input-bg:         #0d1117;
+    --input-border:     #30363d;
+    --input-text:       #e6edf3;
+    --scrollbar-track:  #161b22;
+    --scrollbar-thumb:  #484f58;
+    --ghost-bg:         #162235;
+    --link-color:       #58a6ff;
+    --heading-color:    #e6edf3;
+    --label-color:      #c9d1d9;
+    --toast-bg:         #21262d;
+    --toast-text:       #e6edf3;
+    --settings-bg:      #161b22;
+    --dropdown-bg:      #161b22;
+    --dropdown-text:    #e6edf3;
+    --dropdown-hover:   #1c2128;
+    --badge-bg:         #2d333b;
+    --badge-text:       #8b949e;
+    --loading-bg:       rgba(13,17,23,0.92);
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────── */
 body {
-    background-color: #f8f9fa;
+    background-color: var(--bg);
+    color: var(--text);
     font-size: 0.9rem;
+    transition: background-color 0.2s, color 0.2s;
 }
 
 *:focus {
@@ -8,6 +80,32 @@ body {
     box-shadow: none !important;
 }
 
+h4, h5, h6 {
+    color: var(--heading-color);
+}
+
+a {
+    color: var(--link-color);
+}
+
+label, .col-form-label {
+    color: var(--label-color);
+}
+
+/* ─── Panels & Borders ───────────────────────────────────────────────────── */
+.border {
+    border: 1px solid var(--border) !important;
+}
+
+.bg-light {
+    background-color: var(--settings-bg) !important;
+}
+
+.border.rounded, .border.p-2, .border.p-3 {
+    background-color: var(--surface);
+}
+
+/* ─── List group items ───────────────────────────────────────────────────── */
 .list-group-item {
     padding: 0.4rem 0.75rem;
     cursor: pointer;
@@ -15,94 +113,421 @@ body {
     border-left: none;
     border-right: none;
     border-radius: 0 !important;
+    background-color: var(--surface);
+    border-color: var(--border);
+    color: var(--text);
+    transition: background-color 0.15s;
 }
 
 .list-group-item:hover {
-    background-color: #f1f1f1;
+    background-color: var(--hover-bg);
+    color: var(--text);
 }
 
 .list-group-item.active {
-    background-color: #e9ecef;
-    color: #000;
-    border-color: #dee2e6;
+    background-color: var(--active-bg);
+    color: var(--text);
+    border-color: var(--border);
 }
 
-#groupsList, #itemsList {
-    max-height: 70vh;
-    overflow-y: auto;
+/* Checked groups — checkbox tick is the only indicator, no row highlight */
+.list-group-item.selected {
+    /* intentionally unstyled — the checkbox checkmark is sufficient */
 }
 
-.form-control, .form-control:focus {
+/* Highlighted range — Shift+Arrow / Shift+click navigation */
+.list-group-item.highlighted {
+    background-color: var(--highlighted-bg);
+    border-left: 2px dashed var(--highlighted-border) !important;
+    color: var(--text);
+}
+
+/* Drag states */
+.list-group-item.dragging-selected {
+    opacity: 0.5;
+    background-color: var(--ghost-bg);
+}
+
+.list-group-item.dragging-ghost {
+    opacity: 0.45;
+    background-color: var(--ghost-bg);
+    border-left: 3px solid var(--selected-border) !important;
+}
+
+.sortable-drag {
+    opacity: 1 !important;
+    background-color: var(--surface);
+    box-shadow: 0 0 10px rgba(0,0,0,0.18);
+}
+
+.sortable-ghost {
+    opacity: 0.5;
+    background: var(--ghost-bg);
+}
+
+/* ─── Form controls ─────────────────────────────────────────────────────── */
+.form-control,
+.form-control:focus {
     border-radius: 0;
     box-shadow: none;
-    border-color: #ced4da;
+    border-color: var(--input-border);
+    background-color: var(--input-bg);
+    color: var(--input-text);
 }
 
-.btn {
-    border-radius: 0;
+.form-control::placeholder {
+    color: var(--text-muted);
+    opacity: 1;
 }
 
-.border {
-    border: 1px solid #dee2e6 !important;
-}
-
-/* Make form elements compact */
 .form-control-sm {
     padding: 0.25rem 0.5rem;
     font-size: 0.875rem;
     line-height: 1.5;
 }
 
-/* Ensure form labels don't wrap */
+/* ─── Buttons ────────────────────────────────────────────────────────────── */
+.btn {
+    border-radius: 0;
+}
+
+body.dark-mode .btn-outline-secondary {
+    color: #8b949e;
+    border-color: #30363d;
+}
+body.dark-mode .btn-outline-secondary:hover {
+    background-color: #21262d;
+    color: #e6edf3;
+    border-color: #484f58;
+}
+body.dark-mode .btn-outline-secondary:disabled {
+    color: #484f58;
+    border-color: #21262d;
+}
+
+body.dark-mode .btn-outline-danger {
+    color: #f85149;
+    border-color: #6e2020;
+}
+body.dark-mode .btn-outline-danger:hover {
+    background-color: #3d0f0f;
+    color: #f85149;
+    border-color: #f85149;
+}
+body.dark-mode .btn-outline-danger:disabled {
+    color: #6e2020;
+    border-color: #30363d;
+}
+
+body.dark-mode .btn-outline-success {
+    color: #3fb950;
+    border-color: #1a4d25;
+}
+body.dark-mode .btn-outline-success:hover {
+    background-color: #122a16;
+    color: #3fb950;
+    border-color: #3fb950;
+}
+
+body.dark-mode .btn-outline-primary {
+    color: #388bfd;
+    border-color: #1a3a6e;
+}
+body.dark-mode .btn-outline-primary:hover {
+    background-color: #0d1f40;
+    color: #58a6ff;
+    border-color: #388bfd;
+}
+body.dark-mode .btn-outline-primary:disabled {
+    color: #1a3a6e;
+    border-color: #21262d;
+}
+
+body.dark-mode .btn-primary {
+    background-color: #1f6feb;
+    border-color: #1f6feb;
+    color: #ffffff;
+}
+body.dark-mode .btn-primary:hover {
+    background-color: #388bfd;
+    border-color: #388bfd;
+}
+body.dark-mode .btn-primary:disabled {
+    background-color: #1a3a6e;
+    border-color: #1a3a6e;
+}
+
+body.dark-mode .btn-danger {
+    background-color: #b91c1c;
+    border-color: #b91c1c;
+}
+body.dark-mode .btn-danger:hover {
+    background-color: #f85149;
+    border-color: #f85149;
+}
+
+body.dark-mode .btn-warning {
+    background-color: #9e6a03;
+    border-color: #9e6a03;
+    color: #e6edf3;
+}
+body.dark-mode .btn-warning:hover {
+    background-color: #d29922;
+    border-color: #d29922;
+    color: #000;
+}
+
+body.dark-mode .btn-sm.btn-success {
+    background-color: #238636;
+    border-color: #238636;
+}
+body.dark-mode .btn-sm.btn-success:hover {
+    background-color: #3fb950;
+    border-color: #3fb950;
+}
+
+/* ─── Content type tabs ─────────────────────────────────────────────────── */
+body.dark-mode .btn-sm.btn-primary {
+    background-color: #1f6feb;
+    border-color: #1f6feb;
+}
+
+/* ─── Dropdowns ─────────────────────────────────────────────────────────── */
+.dropdown-menu {
+    background-color: var(--dropdown-bg);
+    border-color: var(--border);
+}
+
+.dropdown-item {
+    color: var(--dropdown-text);
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: var(--dropdown-hover);
+    color: var(--dropdown-text);
+}
+
+/* ─── Badges / counts ───────────────────────────────────────────────────── */
+.badge {
+    background-color: var(--badge-bg) !important;
+    color: var(--badge-text) !important;
+}
+
+body.dark-mode span.badge,
+body.dark-mode .list-group-item .badge {
+    background-color: var(--badge-bg) !important;
+    color: var(--badge-text) !important;
+}
+
+/* ─── Form checks ───────────────────────────────────────────────────────── */
+body.dark-mode .form-check-label {
+    color: var(--label-color);
+}
+body.dark-mode .form-check-input {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+}
+body.dark-mode .form-check-input:checked {
+    background-color: #1f6feb;
+    border-color: #1f6feb;
+}
+
+/* ─── Misc layout ───────────────────────────────────────────────────────── */
+#groupsList, #itemsList {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
 .col-form-label {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-/* Add some spacing between sections */
 .row > div {
     margin-bottom: 5px;
 }
 
-/* Style for selected items */
-.list-group-item.selected {
-    background-color: #e9ecef;
-}
-
-/* Style for items being dragged */
-.list-group-item.dragging-selected {
-    opacity: 0.5;
-    background-color: #d1e7ff;
-}
-
-/* Visual feedback for drop target */
-.sortable-drag {
-    opacity: 1 !important;
-    background-color: #f8f9fa;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-/* Visual feedback for drop placeholder */
-.sortable-ghost {
-    opacity: 0.5;
-    background: #c8ebfb;
-}
-
-/* Custom scrollbar */
+/* ─── Scrollbars ─────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
 }
-
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: var(--scrollbar-track);
 }
-
 ::-webkit-scrollbar-thumb {
-    background: #888;
+    background: var(--scrollbar-thumb);
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: #555;
+/* ─── Loading overlay ───────────────────────────────────────────────────── */
+#loadingOverlay {
+    background: var(--loading-bg) !important;
+    color: var(--text) !important;
+}
+
+body.dark-mode #loadingOverlay .progress {
+    background-color: var(--panel);
+}
+body.dark-mode #loadingOverlay .progress-bar {
+    background-color: #1f6feb;
+}
+
+/* ─── Share modal ───────────────────────────────────────────────────────── */
+.share-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+.share-modal-box {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    width: 360px;
+    max-width: 95vw;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+.share-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text);
+}
+.share-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 0 4px;
+}
+.share-modal-close:hover { color: var(--text); }
+.share-modal-body {
+    padding: 20px 16px;
+    color: var(--text);
+}
+.share-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 0;
+}
+.share-url-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+.share-url-input {
+    font-family: monospace;
+    font-size: 0.85rem;
+    flex: 1;
+}
+.share-qr {
+    display: flex;
+    justify-content: center;
+}
+
+/* ─── Toast notifications ───────────────────────────────────────────────── */
+.m3u-toast {
+    background: var(--toast-bg) !important;
+    color: var(--toast-text) !important;
+    border: 1px solid var(--border);
+}
+
+/* ─── Small text, links in header ──────────────────────────────────────── */
+body.dark-mode .text-end.small {
+    color: var(--text-muted);
+}
+body.dark-mode .text-end.small a {
+    color: var(--link-color);
+}
+
+/* ─── Dark mode toggle icon ─────────────────────────────────────────────── */
+#darkModeBtn {
+    font-size: 1rem;
+    line-height: 1;
+    width: 36px;
+    padding: 0.25rem;
+}
+
+/* ─── Group row checkboxes ──────────────────────────────────────────────── */
+.group-checkbox {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    min-width: 15px;
+    border: 1.5px solid var(--border);
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    margin-right: 7px;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    background: var(--input-bg);
+    vertical-align: middle;
+}
+
+.group-checkbox:hover {
+    border-color: var(--selected-border);
+    transform: scale(1.1);
+}
+
+.group-checkbox:checked {
+    background-color: var(--selected-border);
+    border-color: var(--selected-border);
+}
+
+/* Animated checkmark via clip-path */
+.group-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 4px;
+    width: 4px;
+    height: 8px;
+    border: 2px solid #fff;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg);
+    animation: cbCheck 0.15s ease-out;
+}
+
+@keyframes cbCheck {
+    from { opacity: 0; transform: rotate(45deg) scale(0.5); }
+    to   { opacity: 1; transform: rotate(45deg) scale(1); }
+}
+
+/* Indeterminate state (some selected) */
+.group-checkbox.indeterminate {
+    background-color: var(--selected-border);
+    border-color: var(--selected-border);
+}
+.group-checkbox.indeterminate::after {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 2px;
+    width: 9px;
+    height: 2px;
+    background: #fff;
+    border: none;
+    transform: none;
+    animation: none;
 }

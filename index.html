@@ -17,8 +17,11 @@
             <div class="d-flex align-items-center gap-2">
                 <input type="file" id="fileInput" class="form-control" accept=".m3u,.m3u8" style="max-width: 250px;">
                 <button id="downloadBtn" class="btn btn-primary" disabled>Download Modified M3U</button>
+                <button id="shareBtn" class="btn btn-outline-success" disabled title="Upload & get a short URL"><i class="bi bi-share"></i> Share</button>
+                <button id="undoBtn" class="btn btn-outline-secondary" disabled title="Nothing to undo"><i class="bi bi-arrow-counterclockwise"></i> Undo</button>
                 <button id="clearBtn" class="btn btn-danger">Clear</button>
-                <button id="settingsBtn" class="btn btn-outline-secondary" title="Settings">⚙</button>
+                <button id="darkModeBtn" class="btn btn-outline-secondary" title="Toggle dark mode"><i class="bi bi-moon-fill"></i></button>
+                <button id="settingsBtn" class="btn btn-outline-secondary" title="Settings"><i class="bi bi-gear-fill"></i></button>
             </div>
             <div class="text-end small">
                 <div>Copyright &copy; 2025 - ⇅ M3U Editor Pro</div>
@@ -37,6 +40,71 @@
                     Confirm before deleting groups or channels
                 </label>
             </div>
+            <div class="form-check mt-1">
+                <input class="form-check-input" type="checkbox" id="settingShowIcons">
+                <label class="form-check-label small" for="settingShowIcons">
+                    Show channel icons in channel list
+                </label>
+            </div>
+            <hr class="my-2">
+            <div class="mt-1">
+                <strong class="small">Cloud Storage</strong> <span class="text-muted small">(for Share feature)</span>
+                <div class="d-flex gap-3 mt-1">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="cloudProvider" id="providerDropbox" value="dropbox">
+                        <label class="form-check-label small" for="providerDropbox">Dropbox</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="cloudProvider" id="providerGdrive" value="gdrive">
+                        <label class="form-check-label small" for="providerGdrive">Google Drive</label>
+                    </div>
+                </div>
+
+                <!-- Dropbox fields -->
+                <div id="cloudDropbox" class="mt-2" style="display:none">
+                    <div class="small text-muted mb-1">
+                        1. <a href="https://www.dropbox.com/developers/apps/create" target="_blank">Create a Dropbox app</a> (Full Dropbox access) &nbsp;
+                        2. Copy App Key &amp; Secret below &nbsp;
+                        3. Click Authorize
+                    </div>
+                    <div class="d-flex gap-2 flex-wrap align-items-center">
+                        <input type="text"     id="dbxAppKey"    class="form-control form-control-sm" style="max-width:160px" placeholder="App Key">
+                        <input type="password" id="dbxAppSecret" class="form-control form-control-sm" style="max-width:160px" placeholder="App Secret">
+                        <button id="dbxAuthorizeBtn" class="btn btn-sm btn-outline-primary">Authorize</button>
+                        <span   id="dbxStatus" class="small"></span>
+                    </div>
+                    <div id="dbxCodeRow" class="mt-2" style="display:none">
+                        <div class="small text-muted mb-1">Paste the code from the browser window that opened:</div>
+                        <div class="d-flex gap-2 align-items-center">
+                            <input type="text" id="dbxCodeInput" class="form-control form-control-sm" style="max-width:260px" placeholder="Paste auth code here">
+                            <button id="dbxCodeSubmit" class="btn btn-sm btn-success">Connect</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Google Drive fields -->
+                <div id="cloudGdrive" class="mt-2" style="display:none">
+                    <div class="small text-muted mb-1">
+                        1. <a href="https://console.cloud.google.com/apis/credentials" target="_blank">Create OAuth 2.0 Desktop credentials</a> in Google Cloud &nbsp;
+                        2. Enable Drive API &nbsp;
+                        3. Enter Client ID &amp; Secret &nbsp;
+                        4. Click Authorize
+                    </div>
+                    <div class="d-flex gap-2 flex-wrap align-items-center">
+                        <input type="text"     id="gdriveClientId"     class="form-control form-control-sm" style="max-width:260px" placeholder="Client ID">
+                        <input type="password" id="gdriveClientSecret" class="form-control form-control-sm" style="max-width:200px" placeholder="Client Secret">
+                        <button id="gdriveAuthorizeBtn" class="btn btn-sm btn-outline-primary">Authorize</button>
+                        <span   id="gdriveStatus" class="small"></span>
+                    </div>
+                    <div id="gdriveCodeRow" class="mt-2" style="display:none">
+                        <div class="small text-muted mb-1">Paste the code from the Google consent page:</div>
+                        <div class="d-flex gap-2 align-items-center">
+                            <input type="text" id="gdriveCodeInput" class="form-control form-control-sm" style="max-width:260px" placeholder="Paste auth code here">
+                            <button id="gdriveCodeSubmit" class="btn btn-sm btn-success">Connect</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="row g-2">
@@ -46,12 +114,12 @@
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <h6 class="mb-0">Groups</h6>
                         <div class="d-flex gap-1 flex-wrap">
-                            <button id="sortGroupsBtn" class="btn btn-sm btn-outline-secondary" title="Sort groups A→Z">Sort A-Z</button>
-                            <button id="moveGroupUpBtn" class="btn btn-sm btn-outline-secondary" disabled title="Move selected group(s) up">↑</button>
-                            <button id="moveGroupDownBtn" class="btn btn-sm btn-outline-secondary" disabled title="Move selected group(s) down">↓</button>
-                            <button id="selectAllGroupsBtn" class="btn btn-sm btn-outline-secondary" title="Select all / deselect all groups">☑ All</button>
-                            <button id="newGroupBtn" class="btn btn-sm btn-outline-success">New</button>
-                            <button id="deleteGroupsBtn" class="btn btn-sm btn-outline-danger" disabled>Delete</button>
+                            <button id="sortGroupsBtn" class="btn btn-sm btn-outline-secondary" title="Sort groups A→Z"><i class="bi bi-sort-alpha-down"></i></button>
+                            <button id="moveGroupUpBtn" class="btn btn-sm btn-outline-secondary" disabled title="Move selected group(s) up"><i class="bi bi-arrow-up"></i></button>
+                            <button id="moveGroupDownBtn" class="btn btn-sm btn-outline-secondary" disabled title="Move selected group(s) down"><i class="bi bi-arrow-down"></i></button>
+                            <button id="selectAllGroupsBtn" class="btn btn-sm btn-outline-secondary" title="Select all / deselect all groups"><i class="bi bi-check2-square"></i></button>
+                            <button id="newGroupBtn" class="btn btn-sm btn-outline-success"><i class="bi bi-folder-plus"></i></button>
+                            <button id="deleteGroupsBtn" class="btn btn-sm btn-outline-danger" title="Delete Checked Items" disabled><i class="bi bi-trash3"></i></button>
                         </div>
                     </div>
                     <div class="mb-2">
@@ -69,8 +137,8 @@
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <h6 class="mb-0">Channels</h6>
                         <div class="d-flex gap-1">
-                            <button id="newItemBtn" class="btn btn-sm btn-outline-success">New Item</button>
-                            <button id="sortItemsBtn" class="btn btn-sm btn-outline-secondary">Sort A-Z</button>
+                            <button id="newItemBtn" class="btn btn-sm btn-outline-success"><i class="bi bi-plus-lg"></i> New</button>
+                            <button id="sortItemsBtn" class="btn btn-sm btn-outline-secondary"><i class="bi bi-sort-alpha-down"></i></button>
                             <div class="dropdown">
                                 <button id="moveItemsBtn" class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled>
                                     Move
@@ -79,7 +147,7 @@
                                     <!-- Groups will be populated here -->
                                 </ul>
                             </div>
-                            <button id="deleteItemsBtn" class="btn btn-sm btn-outline-danger" disabled>Delete</button>
+                            <button id="deleteItemsBtn" class="btn btn-sm btn-outline-danger" disabled><i class="bi bi-trash3"></i></button>
                         </div>
                     </div>
                     <div class="mb-2">
@@ -148,6 +216,34 @@
                         <button type="submit" class="btn btn-primary btn-sm">Save Changes</button>
                     </form>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share modal -->
+    <div id="shareModal" class="share-modal-overlay" style="display:none">
+        <div class="share-modal-box">
+            <div class="share-modal-header">
+                <span><i class="bi bi-share"></i> Share Playlist</span>
+                <button id="shareModalClose" class="share-modal-close">&times;</button>
+            </div>
+            <div id="shareModalBody" class="share-modal-body">
+                <div id="shareSpinner" class="share-spinner">
+                    <div class="spinner-border text-success" role="status"></div>
+                    <div id="shareStatus" class="mt-2 small text-muted">Uploading playlist…</div>
+                </div>
+                <div id="shareResult" style="display:none">
+                    <p class="small text-muted mb-2">Your playlist is available at this URL. Copy it into your IPTV player:</p>
+                    <div class="share-url-row">
+                        <input id="shareUrlInput" type="text" class="form-control form-control-sm share-url-input" readonly>
+                        <button id="shareUrlCopy" class="btn btn-sm btn-success" title="Copy to clipboard"><i class="bi bi-clipboard"></i></button>
+                    </div>
+                    <div id="shareUrlCopied" class="small text-success mt-1" style="display:none">Copied!</div>
+                    <p class="small text-muted mt-3 mb-1">Or scan the QR code:</p>
+                    <div id="shareQR" class="share-qr"></div>
+                    <p class="small text-muted mt-2 mb-0" style="font-size:0.75rem">File is hosted temporarily (~14 days). Re-upload when needed.</p>
+                </div>
+                <div id="shareError" style="display:none" class="text-danger small"></div>
             </div>
         </div>
     </div>
