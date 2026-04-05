@@ -82,4 +82,4 @@ All notable changes to M3U Editor Pro are documented here.
 - Single-pass index build (`buildAllIndexes`) — constructs `groupTypeCache`, `groupItemsIndex`, and `_groupCountsCache` in one loop instead of multiple O(n) passes
 
 ## [0.1.0] - 2025-07-28
-- Initial release by @arazgholami — basic M3U editor with group list, channel list, drag-and-drop reorder, item edit form, download, and localStorage persistence
+- Upstream release by [@arazgholami](https://github.com/arazgholami) — this is the original project that was forked as the base for M3U Editor Pro; basic M3U editor with group list, channel list, drag-and-drop reorder, item edit form, download, and localStorage persistence
