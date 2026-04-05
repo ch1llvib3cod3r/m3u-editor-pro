@@ -73,7 +73,7 @@ All notable changes to M3U Editor Pro are documented here.
 ### Added
 - **Content-type tabs** — automatic Live / Movies / Series detection based on URL path and group title keywords; tabs hidden when only one type is present
 - **Virtual scroll** for channel list — large groups render only visible rows, keeping the UI fast for playlists with thousands of channels
-- **Chunked M3U parsing** — file is parsed in chunks with a progress bar overlay, preventing the browser from freezing on large files (300 MB+)
+- **Chunked M3U parsing** — file is parsed in chunks with a progress bar overlay, preventing the browser from freezing on large files (300 MB+); v0.1.0 would crash or hang on large playlists
 - **Move group Up / Down buttons** — reorder groups within the active content-type tab
 - **Sort A→Z / Z→A** — alphabetical sort toggle for groups
 - **Toast notifications** with optional Undo button
